@@ -54,5 +54,5 @@ async def _(event: MessageEvent):
     wxbot.clear(user_id, group_id)
     await clear_wx.finish("clear finished")
 
-def get_id(event: MessageEvent) -> int, int:
+def get_id(event: MessageEvent) -> (int, int):
     return event.user_id, event.group_id if isinstance(event, GroupMessageEvent) else None
