@@ -49,6 +49,7 @@ class ConversationStorage:
         message_list = conversation["messages"]
         message_list.append(new_message)  
         access_token = await get_access_token()  
+        logger.info(f'conversation:{conversation}')
         url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={access_token}"  
         headers = {'Content-Type': 'application/json'}  
         async with httpx.AsyncClient() as client:  
