@@ -46,10 +46,10 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
         else:
             uid = user_id
             name = username
-        if content := msg.get('content'):
-            if "```" in content:
-                content = MessageSegment.image(await md_to_pic(md=content))
-            nodes.append(MessageSegment.node_custom(user_id=uid, nickname=name, content=msg['content']))
+        content = msg.get('content'):
+        if "```" in content:
+            content = MessageSegment.image(await md_to_pic(md=content))
+        nodes.append(MessageSegment.node_custom(user_id=uid, nickname=name, content=content))
     await wx.finish(nodes)
 
 @clear_wx.handle()
