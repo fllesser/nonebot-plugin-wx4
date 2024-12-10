@@ -1,5 +1,5 @@
 from pydantic import BaseModel  
-from nonebot import get_plugin_config
+from nonebot import get_plugin_config, logger
 
 class MyPluginConfig(BaseModel):  
     # 在这里定义你的配置项  
@@ -10,3 +10,4 @@ class MyPluginConfig(BaseModel):
     
     
 wx_config = get_plugin_config(MyPluginConfig)
+logger.info(f"{wx_config.API_KEY}-{wx_config.SECRET_KEY}")
