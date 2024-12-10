@@ -2,6 +2,7 @@ import sqlite3
 import json  
 import hashlib  
 import httpx  
+from nonebot import logger
 from .config import *  
 
   
@@ -40,6 +41,8 @@ class ConversationStorage:
                 return None  
   
     async def send_message(self, user_id, group_id, content):  
+        logger.info(API_Key)
+        logger.info(SECRET_KEY)
         async def get_access_token():  
             url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
             async with httpx.AsyncClient() as client:  
