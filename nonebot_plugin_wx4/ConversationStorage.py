@@ -58,6 +58,9 @@ class ConversationStorage:
         if res := response.json().get("result"):
             new_message = {"role": "assistant", "content": res}
             message_list.append(new_message)
+        elif res := response.json():
+            new_message = {"role": "assistant", "content": res}
+            message_list.append(new_message)
         self.write_conversation(user_id, group_id, conversation)
         if len(message_list) >= self.max_messages * 2:  
             self.clear(user_id, group_id)
