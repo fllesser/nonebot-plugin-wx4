@@ -3,15 +3,12 @@ import json
 import hashlib  
 import httpx  
 from nonebot import logger
-from .config import *  
+from .config import wx_config
 
-  
-Config = MyPluginConfig.Config  
-  
 class ConversationStorage:  
-    API_Key = Config.API_KEY  
-    Secret_Key = Config.SECRET_KEY  
-    max_messages = Config.MAX_MESSAGES  # 设置最大对话次数  
+    API_Key = wx_config.API_KEY  
+    Secret_Key = wx_config.SECRET_KEY  
+    max_messages = wx_config.MAX_MESSAGES  # 设置最大对话次数  
   
     def __init__(self, db_name):  
         self.db_name = db_name  
