@@ -6,8 +6,8 @@ from nonebot import logger
 from .config import wx_config
 
 class ConversationStorage:  
-    API_Key = wx_config.API_KEY  
-    Secret_Key = wx_config.SECRET_KEY  
+    API_Key = wx_config.wx_api_key
+    Secret_Key = wx_config.wx_secret_key 
     max_messages = wx_config.MAX_MESSAGES  # 设置最大对话次数  
   
     def __init__(self, db_name):  
