@@ -37,9 +37,7 @@ class ConversationStorage:
             else:  
                 return None  
   
-    async def send_message(self, user_id, group_id, content):  
-        logger.info(Config.API_KEY)
-        logger.info(Config.SECRET_KEY)
+    async def send_message(self, user_id, group_id, content):
         async def get_access_token():  
             url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
             async with httpx.AsyncClient() as client:  
