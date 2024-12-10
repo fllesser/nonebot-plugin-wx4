@@ -36,7 +36,8 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     nickname = (await bot.get_login_info())['nickname']
     username = (await bot.get_group_member_info(group_id=group_id, user_id=user_id))['nickname']
     nodes = []
-    for msg in msg_list.reverse():
+    msg_list.reverse()
+    for msg in msg_list:
         if msg['role'] == 'assistant':
             uid = bot.self_id
             name = nickname
