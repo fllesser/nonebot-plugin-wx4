@@ -37,7 +37,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     username = (await bot.get_group_member_info(group_id=group_id, user_id=user_id))['nickname']
     nodes = []
     for msg in msg_list:
-        if msg['role'] is 'assistant':
+        if msg['role'] == 'assistant':
             uid = bot.self_id
             name = nickname
         else:
