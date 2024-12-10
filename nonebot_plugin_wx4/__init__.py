@@ -27,7 +27,6 @@ wxbot = ConversationStorage(wx_config.DBNAME)
 
 @wx.handle()
 async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
-    logger.info(f"{wx_config.wx_api_key}-{wx_config.wx_secret_key}")
     user_id, group_id = get_id(event)
     content = args.extract_plain_text().strip()
     if reply := event.reply:
@@ -37,7 +36,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     nickname = (await bot.get_login_info())['nickname']
     username = (await bot.get_group_member_info(group_id=group_id, user_id=user_id))['nickname']
     nodes = []
-    for msg in msg_list:
+    for msg in msg_list.reverse():
         if msg['role'] == 'assistant':
             uid = bot.self_id
             name = nickname
