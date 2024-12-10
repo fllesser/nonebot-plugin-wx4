@@ -33,6 +33,8 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     content = args.extract_plain_text().strip()
     if reply := event.reply:
         content += " " + reply.message.extract_plain_text().strip()
+    if content.strip() == "":
+        return
     await bot.call_api("set_msg_emoji_like", message_id = event.message_id, emoji_id = '282')
     msg_list = await wxbot.send_message(user_id, group_id, content)
     nickname = (await bot.get_login_info())['nickname']
