@@ -45,7 +45,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
         else:
             uid = user_id
             name = username
-        nodes.append(MessageSegment.node_custom(user_id=uid, nickname=name, content=msg['content'])
+        nodes.append(MessageSegment.node_custom(user_id=uid, nickname=name, content=msg['content']))
     await wx.finish(nodes)
 
 @clear_wx.handle()
