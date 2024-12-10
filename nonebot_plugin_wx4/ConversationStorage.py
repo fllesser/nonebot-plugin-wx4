@@ -49,15 +49,15 @@ class ConversationStorage:
         message_list = conversation["messages"]
         message_list.append(new_message)  
         access_token = await get_access_token()  
-        logger.info(f'conversation:{conversation}')
+        logger.info(f'conversation: {conversation}')
         url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={access_token}"  
         headers = {'Content-Type': 'application/json'}  
         async with httpx.AsyncClient() as client:  
             response = await client.post(url, headers=headers, json=conversation, timeout=60.0)  
         
-        result_str = response.json().get("result")
-        new_message = {"role": "assistant", "content": result_str}
-        message_list.append(new_message)
+        if res := response.json().get("result"):
+            new_message = {"role": "assistant", "content": res}
+            message_list.append(new_message)
         if len(message_list) >= self.max_messages * 2:  
             self.clear(user_id, group_id)
             new_message = {"role": "assistant", "content": "超出对话长度，已清空对话记录"}
