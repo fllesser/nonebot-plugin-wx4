@@ -1,10 +1,12 @@
-from nonebot import on_command, logger
+from nonebot import on_command, logger, require
 from nonebot.adapters import Event
 from nonebot.adapters.onebot.v11 import Bot, Message, PrivateMessageEvent, GroupMessageEvent, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
 from .ConversationStorage import ConversationStorage
 from nonebot.plugin import PluginMetadata
 from .config import Config, wx_config
+require("nonebot_plugin_htmlrender")
+from nonebot_plugin_htmlrender import md_to_pic
 
 __plugin_meta__ = PluginMetadata(
     name="文心一言4适配",
@@ -44,7 +46,10 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
         else:
             uid = user_id
             name = username
-        nodes.append(MessageSegment.node_custom(user_id=uid, nickname=name, content=msg['content']))
+        if content := msg.get('content'):
+            if "```" in content:
+                content = MessageSegment.image(await md_to_pic(md=content))
+            nodes.append(MessageSegment.node_custom(user_id=uid, nickname=name, content=msg['content']))
     await wx.finish(nodes)
 
 @clear_wx.handle()
