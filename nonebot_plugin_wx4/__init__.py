@@ -4,7 +4,7 @@ from nonebot.adapters.onebot.v11 import Bot, Message, PrivateMessageEvent, Group
 from nonebot.params import CommandArg
 from .ConversationStorage import ConversationStorage
 from nonebot.plugin import PluginMetadata
-from .config import MyPluginConfig, wx_config
+from .config import Config, wx_config
 
 __plugin_meta__ = PluginMetadata(
     name="文心一言4适配",
@@ -15,7 +15,7 @@ __plugin_meta__ = PluginMetadata(
 
     homepage="https://github.com/Pasumao/nonebot-plugin-wx4",
 
-    config=MyPluginConfig,
+    config=Config,
 
     supported_adapters={"~onebot.v11",},
 )
