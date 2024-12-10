@@ -10,4 +10,3 @@ class MyPluginConfig(BaseModel):
     
     
 wx_config = get_plugin_config(MyPluginConfig)
-logger.info(f"{wx_config.API_KEY}-{wx_config.SECRET_KEY}")
