@@ -4,7 +4,7 @@ from nonebot.adapters.onebot.v11 import Bot, Message, PrivateMessageEvent, Group
 from nonebot.params import CommandArg
 from .ConversationStorage import ConversationStorage
 from nonebot.plugin import PluginMetadata
-from .config import MyPluginConfig
+from .config import MyPluginConfig, wx_config
 
 __plugin_meta__ = PluginMetadata(
     name="文心一言4适配",
@@ -20,12 +20,10 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters={"~onebot.v11",},
 )
 
-Config = MyPluginConfig.Config
-
 wx = on_command("%", block = True, priority = 1)
 clear_wx = on_command("***", block = True, priority = 1)
   
-wxbot = ConversationStorage(Config.DBNAME)
+wxbot = ConversationStorage(wx_config.DBNAME)
 
 @wx.handle()
 async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
