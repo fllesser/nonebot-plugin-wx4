@@ -9,4 +9,4 @@ class Config(BaseModel):
     MAX_MESSAGES: int = 5 
     
     
-wx_config = get_plugin_config(Config)
+wx_config: Config = get_plugin_config(Config)
