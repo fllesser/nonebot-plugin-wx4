@@ -27,6 +27,7 @@ wxbot = ConversationStorage(wx_config.DBNAME)
 
 @wx.handle()
 async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
+    logger.info(f"{wx_config.API_KEY}-{wx_config.SECRET_KEY}")
     user_id, group_id = get_id(event)
     content = args.extract_plain_text().strip()
     if reply := event.reply:
