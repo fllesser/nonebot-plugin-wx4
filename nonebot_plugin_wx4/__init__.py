@@ -47,6 +47,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
             content = premise + " " + reply[delete_len:]
         else:
             content = reply
+        content = content.strip()
     if content == "":
         await bot.call_api("set_msg_emoji_like", message_id = event.message_id, emoji_id = '38')
         return
