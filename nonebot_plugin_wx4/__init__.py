@@ -7,6 +7,7 @@ from nonebot.plugin import PluginMetadata
 from .config import Config, wx_config
 require("nonebot_plugin_htmlrender")
 from nonebot_plugin_htmlrender import md_to_pic
+import re
 
 __plugin_meta__ = PluginMetadata(
     name="文心一言4适配",
@@ -38,12 +39,29 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     user_id, group_id = get_id(event)
     content = args.extract_plain_text().strip()
     if reply := event.reply:
-        content += " " + reply.message.extract_plain_text().strip()
-    if content.strip() == "":
+        reply = reply.message.extract_plain_text().strip()
+        if content:
+            match = re.match(r"(\d*)(\D*)", content)
+            delete_len = int(match.group(1)) if match.group(1) else 0
+            premise = match.group(2)
+            content = premise + " " + reply[delete_len:]
+        else:
+            content = reply
+    if content == "":
         return
     await bot.call_api("set_msg_emoji_like", message_id = event.message_id, emoji_id = '282')
     ai_reply = await wxbot.send_single_message(content)
-    await wx.send(MessageSegment.image(await md_to_pic(md=ai_reply)), at_sender=True)
+    if "```" in ai_reply:
+        mag = [
+            MessageSegment.reply(event.message_id),
+            MessageSegment.image(await md_to_pic(md=ai_reply))
+        ]
+    else:
+        msg = [
+            MessageSegment.node_custom(user_id = user_id, nickname = 'you', content = content),
+            MessageSegment.node_custom(user_id = bot.self_id, nickname = 'wx4', content = ai_reply)
+        ]
+    await wx.send(msg)
     # msg_list = await wxbot.send_multi_message(user_id, group_id, content)
     # nickname = (await bot.get_login_info())['nickname']
     # username = (await bot.get_group_member_info(group_id=group_id, user_id=user_id))['nickname']
