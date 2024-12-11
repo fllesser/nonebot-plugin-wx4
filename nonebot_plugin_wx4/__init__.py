@@ -43,11 +43,9 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     msg_list.reverse()
     for msg in msg_list:
         if msg['role'] == 'assistant':
-            uid = bot.self_id
-            name = nickname
+            uid, name = bot.self_id, nickname
         else:
-            uid = user_id
-            name = username
+            uid, name = user_id, username
         if content := msg.get('content'):
             if "```" in content:
                 content = MessageSegment.image(await md_to_pic(md=content))
