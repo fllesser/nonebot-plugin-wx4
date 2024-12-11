@@ -10,7 +10,7 @@ class ConversationStorage:
     Secret_Key = wx_config.wx_secret_key 
     max_messages = wx_config.MAX_MESSAGES  # 设置最大对话次数  
     access_token = ""
-    url = ""
+    single_url = ""
   
     def __init__(self, db_name):  
         self.db_name = db_name  
@@ -44,13 +44,13 @@ class ConversationStorage:
         async with httpx.AsyncClient() as client:  
             response = await client.post(url)  
             self.access_token = response.json().get("access_token")
-            self.url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={self.access_token}"
+            self.single_url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token={self.access_token}"
     
     async def send_single_message(self, content):
         conversation = {"messages": [{"role": "user", "content": content}]}
         headers = {'Content-Type': 'application/json'}  
         async with httpx.AsyncClient() as client:  
-            response = await client.post(self.url, headers=headers, json=conversation, timeout=60.0)  
+            response = await client.post(self.single_url, headers=headers, json=conversation, timeout=60.0)  
         if res := response.json().get("result"):
             return res
         return "请求失败"
