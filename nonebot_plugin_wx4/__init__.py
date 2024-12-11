@@ -48,6 +48,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
         else:
             content = reply
     if content == "":
+        await bot.call_api("set_msg_emoji_like", message_id = event.message_id, emoji_id = '38')
         return
     await bot.call_api("set_msg_emoji_like", message_id = event.message_id, emoji_id = '282')
     ai_reply = await wxbot.send_single_message(content)
