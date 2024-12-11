@@ -104,7 +104,7 @@ class WxClient:
         async with httpx.AsyncClient() as client:  
             response = await client.post(url)  
             self.access_token = response.json().get("access_token")
-            self.url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token={self.access_token}"
+            self.url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={self.access_token}"
     
     async def send_message(self, content: str) -> str:
         conversation = {"messages": [{"role": "user", "content": content}]}
