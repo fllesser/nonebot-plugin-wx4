@@ -53,7 +53,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     await bot.call_api("set_msg_emoji_like", message_id = event.message_id, emoji_id = '282')
     ai_reply = await wxbot.send_single_message(content)
     if "```" in ai_reply:
-        mag = [
+        msg = [
             MessageSegment.reply(event.message_id),
             MessageSegment.image(await md_to_pic(md=ai_reply))
         ]
