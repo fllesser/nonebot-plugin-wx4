@@ -26,7 +26,6 @@ wx = on_command("%", block = True, priority = 1)
 clear_wx = on_command("***", block = True, priority = 1)
   
 wxbot = ConversationStorage(wx_config.DBNAME)
-await wxbot.init_access_token()
 
 @wx.handle()
 async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
