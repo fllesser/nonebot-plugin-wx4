@@ -100,7 +100,7 @@ class WxClient:
         self.url = ""
     
     async def init_access_token(self):
-        url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
+        url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.api_key}&client_secret={self.secret_key}"  
         async with httpx.AsyncClient() as client:  
             response = await client.post(url)  
             self.access_token = response.json().get("access_token")
