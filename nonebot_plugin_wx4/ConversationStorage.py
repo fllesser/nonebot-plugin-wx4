@@ -91,3 +91,31 @@ class ConversationStorage:
         hash_value = self.generate_hash(user_id, group_id)  
         with self.conn:  
             self.cursor.execute(f"DELETE FROM {self.table_name} WHERE hash=?", (hash_value,))
+
+class WxClient:
+    def __init__(self, api_key: str, secret_key: str):
+        self.api_key = api_key
+        self.secret_key = secret_key
+        self.access_token = ""
+        self.url = ""
+    
+    async def init_access_token(self):
+        url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
+        async with httpx.AsyncClient() as client:  
+            response = await client.post(url)  
+            self.access_token = response.json().get("access_token")
+            self.url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token={self.access_token}"
+    
+    async def send_message(self, content: str) -> str:
+        conversation = {"messages": [{"role": "user", "content": content}]}
+        headers = {'Content-Type': 'application/json'}  
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(self.url, headers=headers, json=conversation, timeout=60.0)
+                response.raise_for_status()  # 检查HTTP请求是否成功
+                data = response.json()
+                return data.get("result", "返回为空")
+            except httpx.RequestError as exc:
+                return f"请求错误: {exc}"
+            except httpx.HTTPStatusError as exc:
+                return f"HTTP错误: {exc.response.status_code}"
