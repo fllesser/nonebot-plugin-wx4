@@ -9,6 +9,8 @@ class ConversationStorage:
     API_Key = wx_config.wx_api_key
     Secret_Key = wx_config.wx_secret_key 
     max_messages = wx_config.MAX_MESSAGES  # 设置最大对话次数  
+    access_token = ""
+    url = ""
   
     def __init__(self, db_name):  
         self.db_name = db_name  
@@ -36,21 +38,32 @@ class ConversationStorage:
                 return conversation  
             else:  
                 return None  
-  
-    async def send_message(self, user_id, group_id, content):
-        async def get_access_token():  
-            url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
-            async with httpx.AsyncClient() as client:  
-                response = await client.post(url)  
-                return response.json().get("access_token")  
-  
+                
+    async def init_access_token(self):  
+        url = f"https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={self.API_Key}&client_secret={self.Secret_Key}"  
+        async with httpx.AsyncClient() as client:  
+            response = await client.post(url)  
+            self.access_token = response.json().get("access_token")
+            self.url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={self.access_token}"
+    
+    async def send_single_message(self, content):
+        conversation = {"messages": [{"role": "user", "content": content}]}
+        headers = {'Content-Type': 'application/json'}  
+        async with httpx.AsyncClient() as client:  
+            response = await client.post(self.url, headers=headers, json=conversation, timeout=60.0)  
+        if res := response.json().get("result"):
+            return res
+        return "请求失败"
+         
+          
+    async def send_multi_message(self, user_id, group_id, content):
         conversation = self.read_conversation(user_id, group_id) or {"messages": []}  
         new_message = {"role": "user", "content": content}  
         message_list = conversation["messages"]
         message_list.append(new_message)  
-        access_token = await get_access_token()  
+        # access_token = await get_access_token()  
         # logger.info(f'conversation: {conversation}')
-        url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={access_token}"  
+        url = f"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro?access_token={self.access_token}"  
         headers = {'Content-Type': 'application/json'}  
         async with httpx.AsyncClient() as client:  
             response = await client.post(url, headers=headers, json=conversation, timeout=60.0)  
