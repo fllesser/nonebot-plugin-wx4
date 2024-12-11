@@ -1,4 +1,4 @@
-from nonebot import on_command, logger, require
+from nonebot import on_command, logger, require, get_driver
 from nonebot.adapters import Event
 from nonebot.adapters.onebot.v11 import Bot, Message, PrivateMessageEvent, GroupMessageEvent, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
@@ -26,6 +26,12 @@ wx = on_command("%", block = True, priority = 1)
 clear_wx = on_command("***", block = True, priority = 1)
   
 wxbot = ConversationStorage(wx_config.DBNAME)
+
+@get_driver().on_startup
+async def _():
+    await wxbot.init_access_token()
+    logger.info(f"wx4 init, access_token: {wxbot.access_token}")
+
 
 @wx.handle()
 async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
