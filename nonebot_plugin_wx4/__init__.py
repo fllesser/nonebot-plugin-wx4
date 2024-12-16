@@ -57,7 +57,7 @@ async def _(bot: Bot, event: MessageEvent, args: Message = CommandArg()):
     if "```" in ai_reply:
         msg = [
             MessageSegment.reply(event.message_id),
-            MessageSegment.image(await md_to_pic(md=ai_reply))
+            MessageSegment.image(await md_to_pic(md=ai_reply, width=650))
         ]
     else:
         msg = [
