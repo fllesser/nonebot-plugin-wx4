@@ -2,6 +2,7 @@ from nonebot import on_command, logger, require, get_driver
 from nonebot.adapters import Event
 from nonebot.adapters.onebot.v11 import Bot, Message, PrivateMessageEvent, GroupMessageEvent, MessageEvent, MessageSegment
 from nonebot.params import CommandArg
+from nonebot.permission import SUPERUSER
 from .ConversationStorage import WxClient
 from nonebot.plugin import PluginMetadata
 from .config import Config, wx_config
@@ -23,7 +24,7 @@ __plugin_meta__ = PluginMetadata(
     supported_adapters={"~onebot.v11",},
 )
 
-wx = on_command("%", block = True, priority = 1)
+wx = on_command("%", block = True, priority = 1, permission = SUPERUSER)
 # clear_wx = on_command("***", block = True, priority = 1)
   
 # wx_client = ConversationStorage(wx_config.DBNAME)
